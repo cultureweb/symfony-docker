@@ -23,7 +23,6 @@ libxrender1 \
 libxml2-dev \
 php-soap \
 yarn \
-gitlab-runner \
 libz-dev libzip-dev \
 nano \
 libfontconfig1 \
