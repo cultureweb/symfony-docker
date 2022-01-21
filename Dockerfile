@@ -1,3 +1,5 @@
+# Dockerfile for a dev web server with PHP/Apache
+
 FROM php:7.4-apache
 
 # GnuPG, also known as GPG, is a command line tool with features for easy integration with other applications
@@ -18,17 +20,19 @@ apt-get -y update && apt-get install -y \
 git \
 zip \
 unzip \
+nodejs \
 mcrypt \
 zlib1g-dev \
 libgmp-dev \
-nodejs \
-libfontconfig1 \
-libxrender1 \
+libpng-dev \
 libxml2-dev \
+libxrender1 \
+libfontconfig1 \
+libz-dev libzip-dev \
 php-soap \
 yarn \
-libz-dev libzip-dev \
 nano \
+vim \
 libfontconfig1 \
 libxrender1 \
 libwebp-dev \
@@ -69,8 +73,6 @@ RUN sed -i "s/DocumentRoot .*/DocumentRoot \/var\/www\/html\/public/" /etc/apach
 # Xdebug is an extension for PHP, and provides a range of features to improve the PHP development experience. 
 COPY xdebug_state.sh /usr/bin/xdebug_state
 RUN chmod +x /usr/bin/xdebug_state
-ENV xdebugRemoteMachine=${xdebugRemoteMachine:-""}
-ENV userPrefixPort=${userPrefixPort:-""}
 
 # Installing the symfony CLI Tool
 RUN  wget https://get.symfony.com/cli/installer -O - | bash
