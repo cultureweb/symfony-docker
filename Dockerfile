@@ -1,3 +1,5 @@
+# Dockerfile for a dev web server with PHP/Apache
+
 FROM php:7.4-apache
 
 RUN apt-get -y update && apt-get install -y wget gnupg
@@ -14,16 +16,17 @@ apt-get -y update && apt-get install -y \
 git \
 zip \
 unzip \
+nodejs \
 mcrypt \
 zlib1g-dev \
 libgmp-dev \
-nodejs \
-libfontconfig1 \
-libxrender1 \
+libpng-dev \
 libxml2-dev \
+libxrender1 \
+libfontconfig1 \
+libz-dev libzip-dev \
 php-soap \
 yarn \
-libz-dev libzip-dev \
 nano \
 libfontconfig1 \
 libxrender1 \
@@ -42,10 +45,8 @@ RUN pecl install apcu zlib \
 && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
 && docker-php-ext-install -j$(nproc) gmp opcache
 
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
-RUN mv composer.phar /usr/local/bin/composer
+RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
+   mv composer.phar /usr/local/bin/composer
 
 RUN yes | pecl install xdebug-2.9.8 \
 	&& echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini
