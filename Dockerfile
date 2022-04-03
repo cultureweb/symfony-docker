@@ -47,7 +47,7 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-RUN yes | pecl install xdebug-2.9.8 \
+RUN yes | pecl install xdebug \
 	&& echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini
 
 RUN mkdir -p /var/lib/php/sessions && chown -R www-data.www-data /var/lib/php/sessions
@@ -62,8 +62,6 @@ RUN sed -i "s/DocumentRoot .*/DocumentRoot \/var\/www\/html\/public/" /etc/apach
 
 COPY xdebug_state.sh /usr/bin/xdebug_state
 RUN chmod +x /usr/bin/xdebug_state
-ENV xdebugRemoteMachine=${xdebugRemoteMachine:-""}
-ENV userPrefixPort=${userPrefixPort:-""}
 
 RUN  wget https://get.symfony.com/cli/installer -O - | bash
 RUN  mv /root/.symfony/bin/symfony /usr/local/bin/symfony
