@@ -1,6 +1,6 @@
 # Dockerfile for a dev web server with PHP/Apache
 
-FROM php:7.4-apache
+FROM php:8.1-apache
 
 # GnuPG, also known as GPG, is a command line tool with features for easy integration with other applications
 RUN apt-get -y update && apt-get install -y wget gnupg
@@ -24,30 +24,32 @@ nodejs \
 mcrypt \
 zlib1g-dev \
 libgmp-dev \
-libpng-dev \
-libxml2-dev \
-libxrender1 \
 libfontconfig1 \
-libz-dev libzip-dev \
+libxrender1 \
+libxml2-dev \
+libxslt-dev \
 php-soap \
 yarn \
+gitlab-runner \
+libz-dev libzip-dev \
 nano \
-vim \
 libfontconfig1 \
 libxrender1 \
 libwebp-dev \
 libjpeg62-turbo-dev \
 libpng-dev \
+libfreetype6-dev \
 zlib1g-dev \
 libicu-dev \
 g++
 
-RUN docker-php-ext-configure gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure xsl
 
-# PECL makes it easy to create shared PHP extensions. 
+# PECL makes it easy to create shared PHP extensions.
 RUN pecl install apcu zlib \
 && docker-php-ext-install -j$(nproc) pdo_mysql \
-&& docker-php-ext-install soap zip gd \
+&& docker-php-ext-install soap zip gd xsl intl \
 && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
 && docker-php-ext-install -j$(nproc) gmp opcache
 
@@ -57,7 +59,7 @@ RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
-RUN yes | pecl install xdebug-2.9.8 \
+RUN yes | pecl install xdebug \
 	&& echo extension=apcu.so > /usr/local/etc/php/conf.d/apcu.ini
 
 RUN mkdir -p /var/lib/php/sessions && chown -R www-data.www-data /var/lib/php/sessions
@@ -70,7 +72,7 @@ RUN mkdir /root/.ssh
 
 RUN sed -i "s/DocumentRoot .*/DocumentRoot \/var\/www\/html\/public/" /etc/apache2/sites-available/000-default.conf
 
-# Xdebug is an extension for PHP, and provides a range of features to improve the PHP development experience. 
+# Xdebug is an extension for PHP, and provides a range of features to improve the PHP development experience.
 COPY xdebug_state.sh /usr/bin/xdebug_state
 RUN chmod +x /usr/bin/xdebug_state
 
@@ -79,6 +81,5 @@ RUN  wget https://get.symfony.com/cli/installer -O - | bash
 RUN  mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 RUN apt install -y python3-pip python3-dev libffi-dev
-
-RUN pip3 install awsebcli --upgrade --user
 ENV PATH=~/.local/bin:$PATH
+RUN pip3 install awsebcli --upgrade --user
