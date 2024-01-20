@@ -79,18 +79,18 @@ RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
 # Python3 => pip
-RUN apt install -y python3-pip-whl python3-dev libffi-dev
-ENV PATH=~/.local/bin:$PATH
-RUN pip3 install --upgrade pip
+# RUN apt install -y python3-pip-whl python3-dev libffi-dev
+# ENV PATH=~/.local/bin:$PATH
+# RUN pip3 install --upgrade pip
 
 # Symfony CLI
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
 RUN apt install symfony-cli -y
 
 # WeasyPrint
-RUN apt-get install -y python3-cffi libpango-1.0-0 libpangoft2-1.0-0 libcairo2-dev libpangocairo-1.0-0
-RUN pip install weasyprint==52.5
-RUN ln  /usr/local/bin/weasyprint /usr/bin
+# RUN apt-get install -y python3-cffi libpango-1.0-0 libpangoft2-1.0-0 libcairo2-dev libpangocairo-1.0-0
+# RUN pip install weasyprint==52.5
+# RUN ln  /usr/local/bin/weasyprint /usr/bin
 
 # XDebug
 RUN yes | pecl install xdebug \
