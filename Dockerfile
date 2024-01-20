@@ -1,6 +1,6 @@
 # Dockerfile for a dev web server with PHP/Apache
 
-FROM php:8.1-apache-bullseye
+FROM php:8.2-apache-bookworm
 
 # GnuPG, also known as GPG, is a command line tool with features for easy integration with other applications
 RUN apt-get -y update && apt-get install -y wget gnupg
