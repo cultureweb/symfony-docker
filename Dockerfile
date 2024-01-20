@@ -79,9 +79,9 @@ RUN php -r "unlink('composer-setup.php');"
 RUN mv composer.phar /usr/local/bin/composer
 
 # Python3 => pip
-RUN apt install -y python3-pip python3-dev libffi-dev
+RUN apt-get update && apt-get install -y python3-pip python3-dev libffi-dev
 ENV PATH=~/.local/bin:$PATH
-RUN pip3 install --upgrade pip
+RUN pip3 install --upgrade pip || { echo "Failed to upgrade pip"; exit 1; }
 
 # Symfony CLI
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
