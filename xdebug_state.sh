@@ -7,8 +7,9 @@ if [ $XDEBUG_ENABLE -eq 1 ]; then
       && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/xdebug.ini \
       && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/xdebug.ini \
       && echo "xdebug.discover_client_host=0" >> /usr/local/etc/php/conf.d/xdebug.ini \
-      && echo "xdebug.client_host=$XDEBUG_REMOTE_MACHINE" >> /usr/local/etc/php/conf.d/xdebug.ini \
-      && echo "xdebug.client_port=$XDEBUG_REMOTE_PORT_MACHINE" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.start_with_request=yes" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/xdebug.ini \
+      && echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/xdebug.ini \
       && echo "xdebug.log='/tmp/xdebug.log'" >> /usr/local/etc/php/conf.d/xdebug.ini \
       && echo "xdebug.log_level=3" >> /usr/local/etc/php/conf.d/xdebug.ini
 
