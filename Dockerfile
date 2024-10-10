@@ -14,7 +14,8 @@ RUN apt-get -y update && apt-get install -y \
     libjpeg62-turbo-dev \
     libfreetype6-dev \
     libxml2-dev \
-    zlib1g-dev
+    zlib1g-dev \
+    libicu-dev  # Ajout de libicu-dev pour l'extension intl
 
 # Crée un utilisateur 'deployer' avec un répertoire personnel
 RUN useradd -m deployer
@@ -24,9 +25,13 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
 
-# Extensions PHP requises pour CakePHP
+# Installation des extensions PHP requises pour CakePHP
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd zip pdo pdo_mysql
+
+# Installation de l'extension intl
+RUN apt-get install -y libicu-dev \
+    && docker-php-ext-install intl
 
 # Configuration d'Apache
 RUN a2enmod rewrite
